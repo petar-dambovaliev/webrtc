@@ -111,7 +111,7 @@ struct ClientSettings {
     max_attempts: u32,
     closed: bool,
     //handler: Handler,
-    collector: Option<Box<dyn Collector + Send>>,
+    collector: Option<Box<dyn Collector + Send + Sync>>,
     c: Option<Arc<dyn Conn + Send + Sync>>,
 }
 
@@ -164,7 +164,7 @@ impl ClientBuilder {
 
     /// with_collector rests client timeout collector, the implementation
     /// of ticker which calls function on each tick.
-    pub fn with_collector(mut self, coll: Box<dyn Collector + Send>) -> Self {
+    pub fn with_collector(mut self, coll: Box<dyn Collector + Send + Sync>) -> Self {
         self.settings.collector = Some(coll);
         self
     }
